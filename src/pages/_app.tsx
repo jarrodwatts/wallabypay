@@ -1,14 +1,15 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { Inter } from "next/font/google";
-import { ThirdwebProvider } from "@thirdweb-dev/react";
+import { ThirdwebProvider, useNetworkMismatch } from "@thirdweb-dev/react";
 import NextNProgress from "nextjs-progressbar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { production, LensProvider } from "@lens-protocol/react-web";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { CHAIN, byoWalletOptions, createWalletOptions } from "@/const/config";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { WalletOptionsProvider } from "@/context/WalletOptionsContext";
+import NetworkSwitchDialog from "@/components/NetworkSwitchDialog";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,11 +45,36 @@ export default function App({ Component, pageProps }: AppProps) {
               }
             >
               <NextNProgress />
-              <Component {...pageProps} />
+              <AppWrapper Component={Component} pageProps={pageProps} />
             </ThirdwebProvider>
           </WalletOptionsProvider>
         </LensProvider>
       </QueryClientProvider>
     </main>
+  );
+}
+
+function AppWrapper({
+  Component,
+  pageProps,
+}: {
+  Component: AppProps["Component"];
+  pageProps: AppProps["pageProps"];
+}) {
+  const isMismatched = useNetworkMismatch();
+
+  const [showDialog, setShowDialog] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (isMismatched) {
+      setShowDialog(true);
+    }
+  }, [isMismatched]);
+
+  return (
+    <>
+      {showDialog && <NetworkSwitchDialog isOpen={isMismatched} />}
+      <Component {...pageProps} />
+    </>
   );
 }
