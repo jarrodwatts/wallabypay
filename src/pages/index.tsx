@@ -1,6 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import styles from "../styles/Landing.module.css";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -23,11 +25,13 @@ export default function Home() {
             Send money to anyone in the world money in under 5 seconds.
           </p>
 
-          <Button className="w-full lg:w-48 h-14 text-lg font-semibold">
-            Get Started
-          </Button>
+          <Link href="/login">
+            <Button className="w-full lg:w-48 h-14 text-lg font-semibold">
+              Get Started
+            </Button>
+          </Link>
         </div>
-        <div>
+        <div className={styles.bounceOnHover}>
           <Image
             src="/wallaby.png"
             width={720}
