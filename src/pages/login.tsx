@@ -182,7 +182,7 @@ export default function Login() {
             height={500}
             quality={100}
             alt="Wallaby"
-            className="invisible lg:-mt-72 lg:visible"
+            className="invisible h-48 lg:-mt-72 lg:visible lg:h-auto"
           />
         </div>
       </div>
