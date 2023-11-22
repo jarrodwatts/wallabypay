@@ -17,8 +17,6 @@ const queryClient = new QueryClient();
 export default function App({ Component, pageProps }: AppProps) {
   const [walletOptions, setWalletOptions] = useState<"byo" | "create">("byo");
 
-  console.log(walletOptions);
-
   return (
     <main className={`${inter.className}`}>
       <QueryClientProvider client={queryClient}>

@@ -18,8 +18,6 @@ export const WalletOptionsProvider = ({
   setWalletOptions: React.Dispatch<React.SetStateAction<"byo" | "create">>;
   children: React.ReactNode;
 }) => {
-  console.log(walletOptions);
-
   return (
     <WalletOptionsContext.Provider value={{ walletOptions, setWalletOptions }}>
       {children}
