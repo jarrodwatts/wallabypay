@@ -25,8 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
           config={{
             environment: production,
             bindings: {
-              getProvider: async () =>
-                new JsonRpcProvider("polygon-zkevm.rpc.thirdweb.com"),
+              getProvider: async () => new JsonRpcProvider(CHAIN.rpc[0]),
               // @ts-expect-error: We're only doing read-only stuff, should ideally never hit this. If it does, it will error.
               getSigner: async () => null,
             },

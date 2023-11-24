@@ -21,7 +21,7 @@ export default function NetworkSwitchDialog({ isOpen }: Props) {
         <DialogHeader>
           <div className="w-full flex flex-row items-center justify-center">
             <Image
-              src={"/wallaby-zkevm.png"}
+              src={"/wallaby-polygon.png"}
               alt="Wallaby"
               width={96}
               height={96}
@@ -31,7 +31,7 @@ export default function NetworkSwitchDialog({ isOpen }: Props) {
               }}
             />
           </div>
-          <DialogTitle>Switch to Polygon zkEVM</DialogTitle>
+          <DialogTitle>Switch to Polygon PoS</DialogTitle>
           <DialogDescription>
             Wallaby Pay uses{" "}
             <Link
@@ -54,7 +54,7 @@ export default function NetworkSwitchDialog({ isOpen }: Props) {
             on the{" "}
             <Link
               className="underline"
-              href="https://polygon.technology/polygon-zkevm"
+              href="https://polygon.technology/polygon-pos"
               target="_blank"
               rel="noopener noreferrer"
             >

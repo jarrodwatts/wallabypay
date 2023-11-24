@@ -57,11 +57,11 @@ export default function Login() {
             on the{" "}
             <Link
               className="underline"
-              href="https://polygon.technology/polygon-zkevm"
+              href="https://polygon.technology/polygon-pos"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Polygon zkEVM
+              Polygon PoS
             </Link>{" "}
             blockchain.
           </p>

@@ -1,5 +1,5 @@
-import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 import React from "react";
+import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 import { Skeleton } from "./ui/skeleton";
 import { useWalletOptions } from "@/context/WalletOptionsContext";
 import { useProfiles } from "@lens-protocol/react-web";

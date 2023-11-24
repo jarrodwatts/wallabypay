@@ -3,18 +3,20 @@ import {
   useAddress,
   useBalance,
 } from "@thirdweb-dev/react";
-import { useProfiles } from "@lens-protocol/react-web";
-import { Skeleton } from "@/components/ui/skeleton";
 import WalletConnectSection from "@/components/WalletConnectSection";
 import AppContainer from "@/components/AppContainer";
-import { Card } from "@/components/ui/card";
 import Image from "next/image";
-import { ArrowDownToLine, Send } from "lucide-react";
 import useTransactionHistory from "@/hooks/useTransactionHistory";
 import RecentTransactionCard from "@/components/RecentTransactionCard";
 import formatNumber from "@/lib/numberFormatter";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useProfiles } from "@lens-protocol/react-web";
+import { Card } from "@/components/ui/card";
+import { ArrowDownToLine, Send } from "lucide-react";
+import { useRouter } from "next/router";
 
 export default function Dashboard() {
+  const router = useRouter();
   const address = useAddress();
 
   const {
@@ -46,6 +48,7 @@ export default function Dashboard() {
   return (
     <AppContainer>
       <div className="container max-w-[720px] flex flex-col items-center lg:items-start h-screen max-h-[85%] px-3 py-8 lg:px-8 lg:mt-48 gap-4 lg:gap-0">
+        {/* Balance Section */}
         <p className="leading-7 [&:not(:first-child)]:mt-6">
           Welcome back,{" "}
           <strong>
@@ -53,20 +56,18 @@ export default function Dashboard() {
           </strong>
           .
         </p>
-
         {loadingNativeTokenBalance && <Skeleton className="w-full h-24" />}
-
         {nativeTokenBalance && (
           <h1 className="scroll-m-20 text-5xl lg:text-8xl font-extrabold tracking-tight lg:mt-4 text-center">
             {formatNumber(Number(nativeTokenBalance?.displayValue))}{" "}
             {nativeTokenBalance?.symbol}
           </h1>
         )}
-
         <p className="w-full text-sm text-muted-foreground text-center lg:text-right">
           Available to spend.
         </p>
 
+        {/* Card Section */}
         <div className="w-full flex flex-row justify-center items-center gap-2 lg:gap-4 mt-6 lg:mt-12">
           <Card className="w-1/2 flex flex-col items-center justify-start gap-2 py-2 hover:shadow-lg transition-shadow duration-200 ease-in-out cursor-pointer">
             <Image
@@ -81,7 +82,10 @@ export default function Dashboard() {
               <ArrowDownToLine />
             </p>
           </Card>
-          <Card className="w-1/2 flex flex-col items-center justify-start gap-2 py-2 hover:shadow-lg transition-shadow duration-200 ease-in-out cursor-pointer">
+          <Card
+            className="w-1/2 flex flex-col items-center justify-start gap-2 py-2 hover:shadow-lg transition-shadow duration-200 ease-in-out cursor-pointer"
+            onClick={() => router.push("/send")}
+          >
             <Image
               src={`/wallaby-money.png`}
               width={128}
@@ -96,13 +100,17 @@ export default function Dashboard() {
           </Card>
         </div>
 
+        {/* Transaction History Section */}
         <h2 className="text-2xl font-semibold mt-16 mb-4">Recent Activity</h2>
-
+        {!!transactionHistoryError && (
+          <p className="text-sm text-red-500">
+            Failed to load transaction history.
+          </p>
+        )}
         {loadingTransactionHistory &&
           Array.from({ length: 5 }).map((_, i) => (
-            <Skeleton key={i} className="w-full h-24 mb-2" />
+            <Skeleton key={i} className="w-full h-16 mb-2" />
           ))}
-
         {transactionHistory && (
           <div className="w-full flex flex-col gap-2 pb-8">
             {transactionHistory.map((transaction) => (
