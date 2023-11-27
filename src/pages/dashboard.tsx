@@ -69,7 +69,10 @@ export default function Dashboard() {
 
         {/* Card Section */}
         <div className="w-full flex flex-row justify-center items-center gap-2 lg:gap-4 mt-6 lg:mt-12">
-          <Card className="w-1/2 flex flex-col items-center justify-start gap-2 py-2 hover:shadow-lg transition-shadow duration-200 ease-in-out cursor-pointer">
+          <Card
+            className="w-1/2 flex flex-col items-center justify-start gap-2 py-2 hover:shadow-lg transition-shadow duration-200 ease-in-out cursor-pointer"
+            onClick={() => router.push("/receive")}
+          >
             <Image
               src={`/wallaby-receive.png`}
               width={128}

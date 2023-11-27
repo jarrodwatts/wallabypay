@@ -48,6 +48,7 @@
     "ethers": "^5.7.2",
     "lucide-react": "^0.292.0",
     "next": "14.0.3",
+    "next-qrcode": "^2.5.1",
     "nextjs-progressbar": "^0.0.16",
     "react": "^18",
     "react-day-picker": "^8.9.1",

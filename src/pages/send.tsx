@@ -132,11 +132,6 @@ export default function SendPage() {
     return true;
   }
 
-  // Render back button if we're not on the first or last phase
-  const shouldRenderBackButton =
-    (formPhase > 0 || (formPhase === 0 && enterAddressOption !== null)) &&
-    formPhase !== formPhases.length - 1;
-
   if (!address) {
     return (
       <AppContainer>
@@ -160,10 +155,14 @@ export default function SendPage() {
             {formPhases[formPhase].title}
           </h2>
 
-          {shouldRenderBackButton && (
+          {formPhase !== 3 && (
             <Button
               variant="outline"
               onClick={() => {
+                if (formPhase === 0 && !enterAddressOption) {
+                  router.push(`/dashboard`);
+                }
+
                 if (formPhase === 0 && enterAddressOption) {
                   setEnterAddressOption(null);
                 }
