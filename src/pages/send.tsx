@@ -290,8 +290,8 @@ export default function SendPage() {
                           className="w-full flex flex-row items-center justify-start gap-2 py-2 px-3 hover:shadow-lg transition-shadow duration-200 ease-in-out cursor-pointer"
                         >
                           <MediaRenderer
-                            // @ts-expect-error: IDK why it doesn't like this
                             src={
+                              // @ts-expect-error: IDK why it doesn't like this
                               profile?.metadata?.picture?.optimized?.uri ||
                               `/profile.png`
                             }
