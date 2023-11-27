@@ -4,6 +4,8 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head />
+      <title>Wallaby Pay</title>
+      <link rel="icon" href="/favicon.ico" />
       <meta name="viewport" content="width=device-width, user-scalable=no" />
       <meta name="theme-color" content="#ffffff" />
       <meta
