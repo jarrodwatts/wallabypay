@@ -125,6 +125,11 @@ export default function Dashboard() {
             ))}
           </div>
         )}
+        {!loadingTransactionHistory && !transactionHistory?.length && (
+          <p className="text-sm text-muted-foreground">
+            No recent transactions.
+          </p>
+        )}
       </div>
     </AppContainer>
   );
