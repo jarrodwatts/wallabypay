@@ -45,25 +45,7 @@ export default function Login() {
             >
               wallets
             </Link>{" "}
-            to send and receive{" "}
-            <Link
-              className="underline"
-              href="https://ethereum.org/en/stablecoins/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              stablecoins
-            </Link>{" "}
-            on the{" "}
-            <Link
-              className="underline"
-              href="https://polygon.technology/polygon-pos"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Polygon PoS
-            </Link>{" "}
-            blockchain.
+            to send and receive funds.
           </p>
 
           <p className="text-md lg:text-lg text-muted-foreground mb-8 max-w-xl leading-normal text-center lg:text-start">
