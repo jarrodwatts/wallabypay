@@ -70,3 +70,7 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+#### 4. Get some test funds 💰
+
+To get some test funds, you can use the [Polygon Faucet](https://faucet.polygon.technology/) to receive free ETH on the Polygon zkEVM chain.
