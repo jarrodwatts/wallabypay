@@ -30,7 +30,8 @@ type Props = {
 export default function RecentTransactionCard({ transaction, address }: Props) {
   // Determine if the transaction is a receive or send.
   // We use this to show different styles in the UI.
-  const isReceive = address === transaction.to_address;
+  const isReceive =
+    address.toLowerCase() === transaction.to_address.toLowerCase();
 
   return (
     <Link
