@@ -26,17 +26,6 @@ export default function Login() {
   return (
     <AppContainer>
       <div className="container justify-center flex flex-col lg:flex-row lg:justify-around items-center h-screen gap-8 lg:gap-0 px-3">
-        <div className="mt-72 lg:mt-0 lg:w-0">
-          <Image
-            src="/wallaby-wallet.png"
-            width={240}
-            height={240}
-            quality={100}
-            alt="Wallaby"
-            className="visible lg:invisible"
-          />
-        </div>
-
         <div className="lg:-mt-48 flex flex-col items-center lg:items-start">
           <h1 className="mt-4 text-4xl lg:text-6xl font-bold lg:font-extrabold leading-snug text-center lg:text-start text-slate-900">
             Let&rsquo;s get started.
