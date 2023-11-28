@@ -27,7 +27,7 @@ export default function Login() {
     <AppContainer>
       <div className="container justify-center flex flex-col lg:flex-row lg:justify-around items-center h-screen gap-8 lg:gap-0 px-3">
         <div className="lg:-mt-48 flex flex-col items-center lg:items-start">
-          <h1 className="mt-4 text-4xl lg:text-6xl font-bold lg:font-extrabold leading-snug text-center lg:text-start text-slate-900">
+          <h1 className="mt-24 lg:mt-4 text-4xl lg:text-6xl font-bold lg:font-extrabold leading-snug text-center lg:text-start text-slate-900">
             Let&rsquo;s get started.
           </h1>
           <p className="text-md lg:text-lg text-muted-foreground mt-6 mb-6 max-w-xl leading-normal text-center lg:text-start">
