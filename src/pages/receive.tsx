@@ -14,6 +14,7 @@ import WalletConnectSection from "@/components/WalletConnectSection";
 import formatNumber from "@/lib/numberFormatter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 /**
  * This is where the user's can see their wallet address so they can send funds to it.
@@ -58,29 +59,51 @@ export default function ReceivePage() {
                     {formatNumber(Number(nativeTokenBalance?.displayValue))}{" "}
                     {nativeTokenBalance?.symbol}
                   </h1>
-
-                  <Alert variant="destructive" className="mt-2">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>Wallaby Pay uses {CHAIN.name}.</AlertTitle>
-                    <AlertDescription>
-                      Please ensure you send the native currency{" "}
-                      <strong>{CHAIN.nativeCurrency.symbol}</strong> on the{" "}
-                      <strong>{CHAIN.name}</strong> network.
-                    </AlertDescription>
-                  </Alert>
-
-                  <Separator className="mt-4" />
                 </>
               )}
             </div>
 
-            {/* QR Code */}
-            <Canvas
-              text={address}
-              options={{
-                width: 384,
-              }}
-            />
+            <Link
+              className="w-full text-sm text-center lg:text-right text-blue-500 bold underline"
+              href="https://faucet.polygon.technology/"
+              target="_blank"
+            >
+              Get free test funds!
+            </Link>
+
+            <Alert variant="destructive" className="mt-2">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle className="text-sm lg:text-md">
+                Wallaby Pay uses {CHAIN.name}.
+              </AlertTitle>
+              <AlertDescription className="text-xs lg:text-sm">
+                Please ensure you send the native currency{" "}
+                <strong>{CHAIN.nativeCurrency.symbol}</strong> on the{" "}
+                <strong>{CHAIN.name}</strong> network.
+              </AlertDescription>
+            </Alert>
+
+            <Separator className="mt-4" />
+
+            {/* QR Code: Desktop */}
+            <div className="hidden lg:block">
+              <Canvas
+                text={address}
+                options={{
+                  width: 256,
+                }}
+              />
+            </div>
+
+            {/* QR Code: Mobile */}
+            <div className="block lg:hidden">
+              <Canvas
+                text={address}
+                options={{
+                  width: 128,
+                }}
+              />
+            </div>
 
             {/* Text displaying wallet address */}
             <p className="text-sm lg:text-lg text-muted-foreground max-w-xl leading-normal text-center mt-4">

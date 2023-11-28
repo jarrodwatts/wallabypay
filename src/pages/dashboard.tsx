@@ -14,6 +14,7 @@ import { useProfiles } from "@lens-protocol/react-web";
 import { Card } from "@/components/ui/card";
 import { ArrowDownToLine, Send } from "lucide-react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 /**
  * This is the main page that user's see after the connection flow from /login.
@@ -77,6 +78,13 @@ export default function Dashboard() {
         <p className="w-full text-sm text-muted-foreground text-center lg:text-right">
           Available to spend.
         </p>
+        <Link
+          className="w-full text-sm text-center lg:text-right text-blue-500 bold underline"
+          href="https://faucet.polygon.technology/"
+          target="_blank"
+        >
+          Get free test funds!
+        </Link>
 
         {/* Card Section: Receive and Send */}
         <div className="w-full flex flex-row justify-center items-center gap-2 lg:gap-4 mt-6 lg:mt-12">
