@@ -16,7 +16,6 @@
 ## What is this?
 
 Wallaby Pay is a simple web3 application that allows users to connect or create a wallet, and send funds to other users.
-
 It uses the [Polygon zkEVM](https://polygon.technology/polygon-zkevm) to allow for fast, cheap transactions between users, but works out of the box with any EVM-compatible blockchain!
 
 ## Features
