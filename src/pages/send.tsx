@@ -477,15 +477,17 @@ export default function SendPage() {
         {/* Phase 3: Payment Sending */}
         {formPhase === 3 && (
           <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-start rounded-xl shadow-xl h-auto w-full backdrop-blur-xl backdrop-filter bg-white bg-opacity-5 px-8 py-8 mb-4">
-            <div className="w-full flex flex-col items-center gap-2">
+            <div className="w-full flex flex-col items-center gap-2 ">
               {isSendingPayment && (
                 <>
-                  <Image
-                    src={`/lol.gif`}
-                    fill
-                    alt="Flying effect gif"
-                    className="opacity-50 rounded-xl"
-                  />
+                  <div className="relative">
+                    <Image
+                      src={`/lol.gif`}
+                      fill
+                      alt="Flying effect gif"
+                      className="opacity-50 rounded-xl"
+                    />
+                  </div>
 
                   <Image
                     src={`/wallaby-flying.png`}
