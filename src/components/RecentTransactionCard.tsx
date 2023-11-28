@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import formatAddress from "@/lib/formatAddress";
 import formatNumber from "@/lib/numberFormatter";
 import Link from "next/link";
-import { CHAIN } from "@/const/config";
+import { explorerUrl } from "@/const/config";
 import { Transaction } from "@covalenthq/client-sdk";
 
 type Props = {
@@ -36,7 +36,7 @@ export default function RecentTransactionCard({ transaction, address }: Props) {
   return (
     <Link
       // Dynamically reading the explorer URL from the CHAIN object in const/config.ts
-      href={`${CHAIN.explorers[0].url}/tx/${transaction.tx_hash}`}
+      href={`${explorerUrl}/tx/${transaction.tx_hash}`}
       passHref
       target="_blank"
     >

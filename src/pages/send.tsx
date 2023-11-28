@@ -14,7 +14,7 @@ import { Card } from "@/components/ui/card";
 import { BookUser, ChevronLeft, Sprout } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { CHAIN } from "@/const/config";
+import { CHAIN, explorerUrl } from "@/const/config";
 import { useRouter } from "next/router";
 import { useDebounce } from "use-debounce";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -515,7 +515,7 @@ export default function SendPage() {
 
                   <Link
                     className="text-sm lg:text-md text-blue-500 bold underline"
-                    href={`${CHAIN.explorers[0].url}/tx/${paymentTransaction?.transactionHash}`}
+                    href={`${explorerUrl}/tx/${paymentTransaction?.transactionHash}`}
                     target="_blank"
                   >
                     View Transaction Details
