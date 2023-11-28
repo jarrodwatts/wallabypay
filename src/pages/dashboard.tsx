@@ -4,10 +4,10 @@ import {
   useBalance,
 } from "@thirdweb-dev/react";
 import WalletConnectSection from "@/components/WalletConnectSection";
+import RecentTransactionCard from "@/components/RecentTransactionCard";
 import AppContainer from "@/components/AppContainer";
 import Image from "next/image";
 import useTransactionHistory from "@/hooks/useTransactionHistory";
-import RecentTransactionCard from "@/components/RecentTransactionCard";
 import formatNumber from "@/lib/numberFormatter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useProfiles } from "@lens-protocol/react-web";
@@ -15,16 +15,24 @@ import { Card } from "@/components/ui/card";
 import { ArrowDownToLine, Send } from "lucide-react";
 import { useRouter } from "next/router";
 
+/**
+ * This is the main page that user's see after the connection flow from /login.
+ * It shows the user's balance, recent transactions, and options to send and receive.
+ */
 export default function Dashboard() {
+  // Useful to send user's to the /send and /receive pages.
   const router = useRouter();
+  // Grab the currently connected wallet address.
   const address = useAddress();
 
+  // Fetch the user's most recent send & receive transactions using the Etherscan API wrapped in a React Query hook.
   const {
     data: transactionHistory,
     isLoading: loadingTransactionHistory,
     error: transactionHistoryError,
   } = useTransactionHistory(address);
 
+  // Just for some nice UI, we can grab the user's Lens profile and show their name if they have one.
   const { data: lensProfiles } = useProfiles({
     where: {
       // @ts-expect-error: Address might be undefined but it works fine
@@ -32,9 +40,12 @@ export default function Dashboard() {
     },
   });
 
+  // Load their balance in the native token. i.e. ETH on Ethereum, MATIC on Polygon, etc.
   const { data: nativeTokenBalance, isLoading: loadingNativeTokenBalance } =
     useBalance(NATIVE_TOKEN_ADDRESS);
 
+  // If the user hit this page without going through the login flow, show the wallet connection section rather than the main page.
+  // We need the user to be connected to a wallet to show their balance and transaction history.
   if (!address) {
     return (
       <AppContainer>
@@ -67,7 +78,7 @@ export default function Dashboard() {
           Available to spend.
         </p>
 
-        {/* Card Section */}
+        {/* Card Section: Receive and Send */}
         <div className="w-full flex flex-row justify-center items-center gap-2 lg:gap-4 mt-6 lg:mt-12">
           <Card
             className="w-1/2 flex flex-col items-center justify-start gap-2 py-2 hover:shadow-lg transition-shadow duration-200 ease-in-out cursor-pointer"
@@ -104,7 +115,7 @@ export default function Dashboard() {
         </div>
 
         {/* Transaction History Section */}
-        <h2 className="text-2xl font-semibold mt-16 mb-4">Recent Activity</h2>
+        <h2 className="text-2xl font-semibold mt-16 mb-4">Recent Payments</h2>
         {!!transactionHistoryError && (
           <p className="text-sm text-red-500">
             Failed to load transaction history.
@@ -118,7 +129,7 @@ export default function Dashboard() {
           <div className="w-full flex flex-col gap-2 pb-8">
             {transactionHistory.map((transaction) => (
               <RecentTransactionCard
-                key={transaction.hash}
+                key={transaction.tx_hash}
                 transaction={transaction}
                 address={address}
               />

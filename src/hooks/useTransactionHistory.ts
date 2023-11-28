@@ -1,17 +1,21 @@
-import { CHAIN } from "@/const/config";
 import { useQuery } from "@tanstack/react-query";
-import { ethers } from "ethers";
+import { CovalentClient } from "@covalenthq/client-sdk";
 
 const fetchTransactionHistory = async (address: string) => {
-  const network = ethers.providers.getNetwork(CHAIN.chainId);
-  const provider = new ethers.providers.EtherscanProvider(network);
-  const transactions = await provider.getHistory(address);
+  const client = new CovalentClient(
+    process.env.NEXT_PUBLIC_COVALENT_API_KEY as string
+  );
+
+  const response = await client.TransactionService.getTransactionsForAddressV3(
+    "polygon-zkevm-testnet",
+    address,
+    0
+  );
 
   // Filter transactions where the address is the sender or receiver
-  const filteredTransactions = transactions
-    .filter((tx) => tx.from === address || tx.to === address)
-    .filter((tx) => tx.value.gt(0))
-    .sort((a, b) => (b?.timestamp || 0) - (a?.timestamp || 0));
+  const filteredTransactions = response.data.items.sort(
+    (a, b) => b?.block_signed_at.getTime() - a?.block_signed_at.getTime()
+  );
 
   // Limit to the 10 latest transactions
   const latestTransactions = filteredTransactions.slice(0, 5);

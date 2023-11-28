@@ -3,27 +3,29 @@ import {
   NATIVE_TOKEN_ADDRESS,
   useAddress,
   useBalance,
-  useSDK,
 } from "@thirdweb-dev/react";
 import WalletConnectSection from "@/components/WalletConnectSection";
 import AppContainer from "@/components/AppContainer";
+import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Card } from "@/components/ui/card";
 import { BookUser, ChevronLeft, Sprout } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import formatNumber from "@/lib/numberFormatter";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { CHAIN } from "@/const/config";
-import Link from "next/link";
-import { TransactionReceipt } from "@ethersproject/providers";
 import { useRouter } from "next/router";
 import { useDebounce } from "use-debounce";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Profile, useSearchProfiles } from "@lens-protocol/react-web";
+import formatNumber from "@/lib/numberFormatter";
+import useSendPayment from "@/hooks/useSendPayment";
+import validateAddress from "@/lib/validateAddress";
 
+// Define the form phases we're going to use in the send page.
 const formPhases = [
+  // Phase 0: Enter Address to send funds to
   {
     title: "Who are you paying?",
     description: "Who's the lucky recipient?",
@@ -40,98 +42,83 @@ const formPhases = [
       },
     ],
   },
+  // Phase 1: Enter Amount to Send
   {
     title: "How much are you paying?",
     description: "How much do you want to send?",
   },
+  // Phase 2: Confirm Details
   {
     title: "Ready to send?",
     description: "Review your payment and confirm.",
   },
+  // Phase 3: Loading + error/success screen
   {
     title: "Sending Payment",
     description: "Please wait while we send your payment.",
   },
 ];
 
+/**
+ * On this page, user's can find a Lens profile to pay, or enter a wallet address to pay.
+ * They first select a wallet address, then enter an amount to pay, then confirm the payment.
+ * It's a long file, you'd probably want to split it up into multiple components.
+ * But for simplicity sake, we've kept it all in one file.
+ */
 export default function SendPage() {
+  // Get the currently conected wallet
   const address = useAddress();
+
+  // Get the router so we can navigate between pages, e.g. go back to /dashboard
   const router = useRouter();
 
-  // Phase 0 State
+  // Manage what phase of the form we're on.
+  const [formPhase, setFormPhase] = useState<number>(0);
+
+  // What option did the user select to enter the address to pay? Lens or Wallet Address?
   const [enterAddressOption, setEnterAddressOption] = useState<
     null | "address" | "lens"
   >(null);
+
+  // What is the wallet address we're sending funds to?
   const [addressToPay, setAddressToPay] = useState<string>("");
+
+  // Is there any error with the address we're sending funds to? e.g. non-valid address?
   const [addressToPayError, setAddressToPayError] = useState<string>("");
 
+  // What has the user entered as the Lens address to pay?
   const [lensProfileToPay, setLensProfileToPay] = useState<string>("");
+
+  // Debounce the lens profile to pay so we don't spam the API with requests.
   const [debouncedLensProfile] = useDebounce(lensProfileToPay, 1000);
-  const { data: profiles, loading: loadingProfiles } = useSearchProfiles({
+
+  // Search for the lens profile the user has entered to find relevant profiles that match the query.
+  const { data: profiles } = useSearchProfiles({
     query: debouncedLensProfile,
   });
+
+  // What lens profile did the user select to pay?
   const [selectedLensProfile, setSelectedLensProfile] = useState<Profile>();
 
-  // Phase 1 State
+  // How much are we sending?
   const [amountToPay, setAmountToPay] = useState<string>("");
+
+  // Is there any error with the amount we're sending? e.g. non-valid amount?
   const [amountToPayError, setAmountToPayError] = useState<string>("");
 
-  // Phase 3 State
-  const [paymentTransaction, setPaymentTransaction] =
-    useState<TransactionReceipt>();
-  const [isSendingPayment, setIsSendingPayment] = useState<boolean>(false);
-  const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false);
-  const [paymentError, setPaymentError] = useState<any>();
-
+  // Load the user's native token balance so we can show it in the UI.
   const { data: nativeTokenBalance, isLoading: loadingNativeTokenBalance } =
     useBalance(NATIVE_TOKEN_ADDRESS);
 
-  const [formPhase, setFormPhase] = useState<number>(0);
+  // Function for sending the payment, incl. the response, error and loading state.
+  const {
+    data: paymentTransaction,
+    error: paymentError,
+    isLoading: isSendingPayment,
+    mutate: sendPayment,
+  } = useSendPayment();
 
-  const sdk = useSDK();
-  async function sendPayment() {
-    if (!sdk || !addressToPay || !amountToPay) {
-      return;
-    }
-
-    try {
-      setIsSendingPayment(true);
-      const tx = await sdk.wallet.transfer(
-        addressToPay,
-        amountToPay,
-        NATIVE_TOKEN_ADDRESS
-      );
-      setPaymentSuccess(true);
-      setPaymentTransaction(tx.receipt);
-      console.log(tx);
-    } catch (error) {
-      setPaymentError(error);
-      console.error(error);
-    } finally {
-      setIsSendingPayment(false);
-    }
-  }
-
-  function validateAddress(addressToSend: string): string | true {
-    if (!addressToSend) {
-      return "Please enter an address";
-    }
-
-    if (addressToSend === address) {
-      return "You can't pay yourself";
-    }
-
-    if (addressToSend.length !== 42) {
-      return "Invalid address";
-    }
-
-    if (!addressToSend.startsWith("0x")) {
-      return "Invalid address";
-    }
-
-    return true;
-  }
-
+  // If no wallet connected, show the wallet connection section.
   if (!address) {
     return (
       <AppContainer>
@@ -148,6 +135,7 @@ export default function SendPage() {
         <h1 className="scroll-m-20 text-4xl lg:text-6xl font-extrabold tracking-tight lg:mt-4 text-center">
           Pay Someone
         </h1>
+
         <Separator className="w-5/6  mt-4 lg:mt-8 mb-8" />
 
         <div className="flex flex-col-reverse lg:flex-row gap-8 lg:gap-2 items-center justify-center lg:w-full lg:justify-between">
@@ -155,6 +143,7 @@ export default function SendPage() {
             {formPhases[formPhase].title}
           </h2>
 
+          {/* Show the back button which has different behaviour depending on where we are at in the form */}
           {formPhase !== 3 && (
             <Button
               variant="outline"
@@ -187,7 +176,7 @@ export default function SendPage() {
           <>
             <div className="w-full flex flex-row justify-center items-center gap-2 lg:gap-4 mb-8">
               {/* @ts-expect-error: Also fine - formPhases[0].options can only be undefined if we change the object which we don't */}
-              {formPhases[0].options.map((option, index) => (
+              {formPhases[0].options.map((option) => (
                 <Card
                   key={option.key}
                   onClick={() => {
@@ -207,7 +196,7 @@ export default function SendPage() {
           </>
         )}
 
-        {/* Phase 0 Option A: Wallet Address */}
+        {/* Phase 0, Option A: Wallet Address */}
         {formPhase === 0 && enterAddressOption === "address" && (
           <div className="w-5/6 flex flex-col items-center justify-center">
             <div className="w-full flex flex-row justify-end items-start gap-2">
@@ -231,7 +220,7 @@ export default function SendPage() {
               </div>
               <Button
                 onClick={() => {
-                  const validation = validateAddress(addressToPay);
+                  const validation = validateAddress(addressToPay, address);
                   if (validation !== true) {
                     setAddressToPayError(validation);
                     return;
@@ -466,8 +455,15 @@ export default function SendPage() {
 
                 <Button
                   onClick={() => {
-                    sendPayment();
-                    setFormPhase(formPhase + 1);
+                    try {
+                      sendPayment({
+                        addressToPay,
+                        amountToPay,
+                      });
+                      setFormPhase(formPhase + 1);
+                    } catch (e) {
+                      console.error(e);
+                    }
                   }}
                   className="w-1/3"
                 >
@@ -502,7 +498,7 @@ export default function SendPage() {
                 </>
               )}
 
-              {paymentSuccess && (
+              {!paymentError && paymentTransaction && (
                 <>
                   <Image
                     src={`/wallaby-success.png`}
@@ -535,7 +531,7 @@ export default function SendPage() {
                 </>
               )}
 
-              {paymentError && (
+              {!!paymentError && (
                 <>
                   <Image
                     src={`/wallaby-failure.png`}
@@ -565,8 +561,14 @@ export default function SendPage() {
 
                     <Button
                       onClick={() => {
-                        setPaymentError(undefined);
-                        sendPayment();
+                        try {
+                          sendPayment({
+                            addressToPay,
+                            amountToPay,
+                          });
+                        } catch (e) {
+                          console.error(e);
+                        }
                       }}
                       className="w-1/3"
                     >
@@ -581,7 +583,8 @@ export default function SendPage() {
                   </p>
 
                   <p className="text-sm lg:text-md text-red-500 break-all max-w-full">
-                    {paymentError?.message}
+                    {(paymentError as Error)?.message ||
+                      "An unknown error occurred."}
                   </p>
                 </>
               )}

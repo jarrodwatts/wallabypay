@@ -1,4 +1,4 @@
-import { Mumbai } from "@thirdweb-dev/chains";
+import { PolygonZkevmTestnet } from "@thirdweb-dev/chains";
 import {
   metamaskWallet,
   coinbaseWallet,
@@ -9,8 +9,11 @@ import {
   embeddedWallet,
 } from "@thirdweb-dev/react";
 
-export const CHAIN = Mumbai;
+// What chain do you want the app to run on?
+// This const is used throughout the app for the chain's name, native currency, explorer URL, RPC, etc.
+export const CHAIN = PolygonZkevmTestnet;
 
+// What wallet options do you want to show when the user clicks "Connect Wallet"
 export const byoWalletOptions = [
   metamaskWallet(),
   coinbaseWallet(),
@@ -20,6 +23,7 @@ export const byoWalletOptions = [
   trustWallet(),
 ];
 
+// What wallet options do you want to show when the user clicks "Sign up with Email?"
 export const createWalletOptions = [
   embeddedWallet({
     auth: {

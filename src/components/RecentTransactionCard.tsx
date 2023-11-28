@@ -1,24 +1,41 @@
 import React from "react";
 import { Card } from "./ui/card";
-import { TransactionResponse } from "@ethersproject/providers";
 import { CircleDot } from "lucide-react";
 import { ethers } from "ethers";
 import formatAddress from "@/lib/formatAddress";
 import formatNumber from "@/lib/numberFormatter";
 import Link from "next/link";
 import { CHAIN } from "@/const/config";
+import { Transaction } from "@covalenthq/client-sdk";
 
 type Props = {
-  transaction: TransactionResponse;
+  transaction: Transaction;
   address: string;
 };
 
+/**
+ * RecentTransactionCard component displays information about a given transaction.
+ * Used in the "Recent Payments" tab on the dashboard.
+ *
+ * @component
+ * @example
+ * // Usage in a parent component:
+ * <RecentTransactionCard transaction={tx} address={"0x123"} />
+ *
+ * @param {object} props - React props for the RecentTransactionCard component.
+ * @param {TransactionResponse} props.transaction - The Ethereum transaction response object.
+ * @param {string} props.address - The user's Ethereum address.
+ * @returns {JSX.Element} - Returns the JSX element representing the RecentTransactionCard.
+ */
 export default function RecentTransactionCard({ transaction, address }: Props) {
-  const isReceive = address === transaction.to;
+  // Determine if the transaction is a receive or send.
+  // We use this to show different styles in the UI.
+  const isReceive = address === transaction.to_address;
 
   return (
     <Link
-      href={`${CHAIN.explorers[0].url}/tx/${transaction.hash}`}
+      // Dynamically reading the explorer URL from the CHAIN object in const/config.ts
+      href={`${CHAIN.explorers[0].url}/tx/${transaction.tx_hash}`}
       passHref
       target="_blank"
     >
@@ -30,9 +47,9 @@ export default function RecentTransactionCard({ transaction, address }: Props) {
 
           <p className="text-sm font-semibold">
             {isReceive
-              ? formatAddress(transaction.from)
-              : transaction.to
-              ? formatAddress(transaction.to)
+              ? formatAddress(transaction.from_address)
+              : transaction.to_address
+              ? formatAddress(transaction.to_address)
               : "Unknown"}
           </p>
         </div>
@@ -44,7 +61,7 @@ export default function RecentTransactionCard({ transaction, address }: Props) {
         >
           {isReceive ? "+" : "-"}
           {formatNumber(
-            Number(ethers.utils.formatEther(transaction.value))
+            Number(ethers.utils.formatEther(transaction.value || 0))
           )}{" "}
         </p>
       </Card>

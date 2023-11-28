@@ -5,6 +5,10 @@ import styles from "../styles/Landing.module.css";
 import Link from "next/link";
 import AppContainer from "@/components/AppContainer";
 
+/**
+ * A simple Homepage for the app.
+ * Just a title with a description and an image that bounces when you hover on it lol =)
+ */
 export default function Home() {
   return (
     <AppContainer>
@@ -18,11 +22,26 @@ export default function Home() {
             Send money to anyone in the world money in under 5 seconds.
           </p>
 
-          <Link href="/login">
-            <Button className="w-full lg:w-48 h-14 text-lg font-semibold">
-              Get Started
-            </Button>
-          </Link>
+          <div className="flex flex-col lg:flex-row gap-4 w-full lg:w-auto justify-center lg:justify-start">
+            <Link href="/login" passHref>
+              <Button className="w-full lg:w-48 h-14 text-lg font-semibold">
+                Get Started
+              </Button>
+            </Link>
+
+            <Link
+              href="https://github.com/jarrodwatts/wallabypay"
+              target="_blank"
+              passHref
+            >
+              <Button
+                variant="outline"
+                className="w-full lg:w-48 h-14 text-lg font-semibold"
+              >
+                View GitHub
+              </Button>
+            </Link>
+          </div>
         </div>
         <div className={styles.bounceOnHover}>
           <Image

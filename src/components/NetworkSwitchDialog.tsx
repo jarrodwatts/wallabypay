@@ -14,6 +14,19 @@ type Props = {
   isOpen: boolean;
 };
 
+/**
+ * NetworkSwitchDialog component represents a dialog for switching to the Polygon PoS network.
+ * This is opened in the _app.tsx file when the user is on the wrong network set in the const/config.ts file.
+ *
+ * @component
+ * @example
+ * // Usage in a parent component:
+ * <NetworkSwitchDialog isOpen={true} />
+ *
+ * @param {object} props - React props for the NetworkSwitchDialog component.
+ * @param {boolean} props.isOpen - Indicates whether the dialog is open or closed.
+ * @returns {JSX.Element} - Returns the JSX element representing the NetworkSwitchDialog.
+ */
 export default function NetworkSwitchDialog({ isOpen }: Props) {
   return (
     <Dialog open={isOpen}>
@@ -31,7 +44,7 @@ export default function NetworkSwitchDialog({ isOpen }: Props) {
               }}
             />
           </div>
-          <DialogTitle>Switch to Polygon PoS</DialogTitle>
+          <DialogTitle>Switch to {CHAIN.name}</DialogTitle>
           <DialogDescription>
             Wallaby Pay uses{" "}
             <Link
@@ -42,25 +55,7 @@ export default function NetworkSwitchDialog({ isOpen }: Props) {
             >
               wallets
             </Link>{" "}
-            to send and receive{" "}
-            <Link
-              className="underline"
-              href="https://ethereum.org/en/stablecoins/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              stablecoins
-            </Link>{" "}
-            on the{" "}
-            <Link
-              className="underline"
-              href="https://polygon.technology/polygon-pos"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {CHAIN.name}
-            </Link>{" "}
-            blockchain.
+            to send and receive funds.
           </DialogDescription>
 
           <ConnectWallet

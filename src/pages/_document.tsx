@@ -1,5 +1,9 @@
 import { Html, Head, Main, NextScript } from "next/document";
 
+/**
+ * This is a default page that comes with Next.js
+ * We can define some metadata about our app in here like title for example
+ */
 export default function Document() {
   return (
     <Html lang="en">

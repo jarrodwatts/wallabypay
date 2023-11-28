@@ -15,11 +15,21 @@ import formatNumber from "@/lib/numberFormatter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 
+/**
+ * This is where the user's can see their wallet address so they can send funds to it.
+ * It takes the address from the useAddress hook and displays it in multiple ways: as a QR code, as text, and as a button to copy it to the clipboard.
+ */
 export default function ReceivePage() {
+  // Grab the connected wallet address.
   const address = useAddress();
+
+  // Useful to send user's to the /dashboard page.
   const router = useRouter();
+
+  // We're using the next-qrcode library to generate the QR code of the wallet address
   const { Canvas } = useQRCode();
 
+  // Load the balance of the native token, i.e. ETH on Ethereum, MATIC on Polygon, etc.
   const { data: nativeTokenBalance, isLoading: loadingNativeTokenBalance } =
     useBalance(NATIVE_TOKEN_ADDRESS);
 
@@ -33,6 +43,7 @@ export default function ReceivePage() {
 
         {address ? (
           <>
+            {/* Balance Section */}
             <div className="w-full flex flex-col justify-center items-center mt-2 ml-2">
               {loadingNativeTokenBalance && (
                 <Skeleton className="w-full h-24" />
@@ -62,6 +73,8 @@ export default function ReceivePage() {
                 </>
               )}
             </div>
+
+            {/* QR Code */}
             <Canvas
               text={address}
               options={{
@@ -69,10 +82,12 @@ export default function ReceivePage() {
               }}
             />
 
+            {/* Text displaying wallet address */}
             <p className="text-sm lg:text-lg text-muted-foreground max-w-xl leading-normal text-center mt-4">
               Your Wallet Address: <strong>{address}</strong>
             </p>
 
+            {/* Button to copy wallet address */}
             <Button
               className="w-full mt-2"
               onClick={() => {
@@ -82,6 +97,7 @@ export default function ReceivePage() {
               Copy Wallet Address
             </Button>
 
+            {/* Go back to the homepage */}
             <Button
               className="w-full mt-1"
               variant="outline"
@@ -93,6 +109,7 @@ export default function ReceivePage() {
             </Button>
           </>
         ) : (
+          // If there's no connected wallet, ask the user to connect one.
           <WalletConnectSection />
         )}
       </div>

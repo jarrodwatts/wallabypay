@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@covalenthq/client-sdk": "^0.6.4",
     "@hookform/resolvers": "^3.3.2",
     "@lens-protocol/react-web": "^2.0.0-alpha.21",
     "@radix-ui/react-accordion": "^1.1.2",

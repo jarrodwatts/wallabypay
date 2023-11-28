@@ -4,6 +4,24 @@ import { Skeleton } from "./ui/skeleton";
 import { useWalletOptions } from "@/context/WalletOptionsContext";
 import { useProfiles } from "@lens-protocol/react-web";
 
+/**
+ * The wallet connection section for ensuring the user is in a connected state to the dApp.
+ * Provides two options for users:
+ * - Connect an existing web3 wallet, such as MetaMask.
+ * - Create a new wallet using thirdweb's Embedded Wallet powered by Paper.
+ * Since the list of wallets is defined in the ThirdwebProvider in _app.tsx, that list is
+ * set "upstream" when the user clicks on the button. i.e. it's set to:
+ * - Show all kinds of web3 wallet options if the user clicks the "Connect" button.
+ * - Show only the Paper wallet option if the user clicks the "Create" button.
+ * Also see: config.ts for the arrays that get passed to the ThirdwebProvider.
+ *
+ * @component
+ * @example
+ * // Usage in a parent component:
+ * <WalletConnectSection />
+ *
+ * @returns {JSX.Element} - Returns the JSX element representing the WalletConnectSection.
+ */
 export default function WalletConnectSection() {
   const address = useAddress();
   const { setWalletOptions } = useWalletOptions();

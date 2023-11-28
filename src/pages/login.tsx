@@ -7,14 +7,20 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
+/**
+ * The login page is where the user is directed after clicking "Get Started" on the homepage.
+ * It asks them to either connect their wallet or sign up with their email as defined in the WalletConnectSection component.
+ */
 export default function Login() {
   const router = useRouter();
   const address = useAddress();
 
+  // If the user already has a wallet connected, just send them straight to the dashboard.
   useEffect(() => {
     if (address) {
       router.push("/dashboard");
     }
+    // Re-check whenever the address changes. Meaning we redirect after a wallet is detected as connected.
   }, [address, router]);
 
   return (
